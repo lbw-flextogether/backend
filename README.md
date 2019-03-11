@@ -106,7 +106,7 @@ URL: `/api/invite/:token/verify`
 ### Example:
 
 ```
-https://flextogether.netflify.com/api/invite/hbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoyNSwiaWF0IjoxNTUyMjg0NTc5LCJleHAiOjE1NTIzNzA5Nzl9.MsQbQ2kEp5ARg0d7nO7Cw-AYEyJL5urcrGei_S/verify
+https://flextogether.herokuapp.com/api/invite/hbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoyNSwiaWF0IjoxNTUyMjg0NTc5LCJleHAiOjE1NTIzNzA5Nzl9.MsQbQ2kEp5ARg0d7nO7Cw-AYEyJL5urcrGei_S/verify
 ```
 
 ### Response:
@@ -138,7 +138,7 @@ URL: `/api/invite/:token`
 ### Example:
 
 ```
-https://flextogether.netflify.com/api/invite/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoyNSwiaWF0IjoxNTUyMjg0NTc5LCJleHAiOjE1NTIzNzA5Nzl9.MsQbQ2kEp5ARg0d7nO7Cw-AYEyJL5urcrGei_S_NAQc
+https://flextogether.herokuapp.com/api/invite/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoyNSwiaWF0IjoxNTUyMjg0NTc5LCJleHAiOjE1NTIzNzA5Nzl9.MsQbQ2kEp5ARg0d7nO7Cw-AYEyJL5urcrGei_S_NAQc
 ```
 
 ### Response:
@@ -208,7 +208,7 @@ URL: `/api/invite/:token/confirm`
 URL:
 
 ```
-https://flextogether.netflify.com/api/invite/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoyNSwiaWF0IjoxNTUyMjg0NTc5LCJleHAiOjE1NTIzNzA5Nzl9.MsQbQ2kEp5ARg0d7nO7Cw-AYEyJL5urcrGei_S_NAQc/confirm
+https://flextogether.herokuapp.com/api/invite/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoyNSwiaWF0IjoxNTUyMjg0NTc5LCJleHAiOjE1NTIzNzA5Nzl9.MsQbQ2kEp5ARg0d7nO7Cw-AYEyJL5urcrGei_S_NAQc/confirm
 ```
 
 JSON:
