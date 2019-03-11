@@ -24,13 +24,13 @@ URL: `/api/invite`
 | email                    | string | yes      | Up to 128 characters                                                      |
 | phone_number             | string | yes      | Min 10 and Max 15 characters                                              |
 | notificaton_preference   | string | yes      | Choose one option from Text, Email, Text & Email                          |
-| mobility_level           | string | yes      | Choose one option from Low, Medium, & High                                |
+| mobility_level           | string | yes      | Choose one option from Low, Medium, High                                  |
 | time_zone                | string | yes      | IANA timezone strings, validated against [https://momentjs.com/timezone/] |
 | availability             | array  | yes      | Choose any Day from Monday - Sunday and any time between 6:00am - 11:00pm |
 | recipient_name           | string | yes      | Up to 128 characters                                                      |
 | recipient_email          | string | yes      | Up to 128 characters                                                      |
 | recipient_phone_number   | string | yes      | Min 10 and Max 15 characters                                              |
-| recipient_mobility_level | string | yes      | Choose one option from Low, Medium, & High                                |
+| recipient_mobility_level | string | yes      | Choose one option from Low, Medium, High                                  |
 
 ### Example:
 
@@ -159,7 +159,7 @@ https://flextogether.herokuapp.com/api/invite/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVC
   "availability": [
     {
       "day": "Monday",
-      "time_slots": ["6:00 am", "6:30am"]
+      "time_slots": ["6:00 am", "6:30 am"]
     },
     {
       "day": "Friday",
