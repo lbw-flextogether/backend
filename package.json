@@ -14,6 +14,9 @@
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "helmet": "^3.15.1",
+    "joi": "^14.3.1",
+    "joi-phone-number": "^2.1.1",
+    "joi-timezone": "^2.0.0",
     "knex": "^0.16.3",
     "morgan": "^1.9.1",
     "sqlite3": "^4.0.6"
