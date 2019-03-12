@@ -1,5 +1,12 @@
 const db = require("../data/dbConfig");
 
+async function inviteToJSON(invite) {
+  return {
+    ...invite,
+    availability: JSON.parse(invite.availability)
+  };
+}
+
 async function insert(value) {
   const updatedValue = {
     ...value,
@@ -12,12 +19,15 @@ async function insert(value) {
     .where({ id })
     .first();
 
-  return {
-    ...invite,
-    availability: JSON.parse(invite.availability)
-  };
+  return inviteToJSON(invite);
+}
+
+async function getByToken(token) {
+  const invite = await db("invites").first();
+  return inviteToJSON(invite);
 }
 
 module.exports = {
-  insert
+  insert,
+  getByToken
 };

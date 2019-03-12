@@ -26,4 +26,21 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Verfiy email
+router.post("/:token/verify", async (req, res) => {
+  res.status(201).end();
+});
+
+// Get invite by token
+router.get("/:token", async (req, res) => {
+  const invite = await Invites.getByToken();
+  res.status(200).json(invite);
+});
+
+// Confirm invite by token
+
+router.post("/:token/confirm", async (req, res) => {
+  res.status(201).end();
+});
+
 module.exports = router;
