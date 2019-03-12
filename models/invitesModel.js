@@ -13,7 +13,7 @@ async function insert(value) {
     availability: JSON.stringify(value.availability)
   };
 
-  const [id] = await db("invites").insert(updatedValue);
+  const [id] = await db("invites").insert(updatedValue, "id");
 
   const invite = await db("invites")
     .where({ id })
