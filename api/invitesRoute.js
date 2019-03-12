@@ -2,6 +2,8 @@ const express = require("express");
 const Invites = require("../models/invitesModel");
 const Joi = require("joi");
 const invitesSchemas = require("../schemas/schemas");
+const Email = require("../services/email");
+const tokenService = require("../services/tokenService");
 
 const router = express.Router();
 
@@ -16,6 +18,7 @@ router.post("/", async (req, res) => {
       res.status(400).json(error.details[0]);
     } else {
       const invite = await Invites.insert(value);
+      await Email.sendVerficationEmail(invite);
       res.status(201).json(invite);
     }
   } catch (error) {
@@ -33,8 +36,22 @@ router.post("/:token/verify", async (req, res) => {
 
 // Get invite by token
 router.get("/:token", async (req, res) => {
-  const invite = await Invites.getByToken();
-  res.status(200).json(invite);
+  try {
+    const decoded = await tokenService.verifyToken(req.params.token);
+    const invite = await Invites.getById(decoded.id);
+
+    res.status(200).json(invite);
+  } catch (error) {
+    console.log(error);
+
+    if (error.name === "JsonWebTokenError") {
+      res.status(400).json({ message: "Invalid token provided" });
+    } else {
+      res.status(500).json({
+        message: "There was an error to get invite."
+      });
+    }
+  }
 });
 
 // Confirm invite by token
