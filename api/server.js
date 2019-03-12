@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
-const inviteRoute = require("../routes/invitesRoute");
+const inviteRoute = require("./invitesRoute");
 
 const server = express();
 
