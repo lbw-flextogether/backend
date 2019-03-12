@@ -17,7 +17,7 @@ async function sendVerficationEmail(invite) {
 <br/>
 Thanks for signing up! Can you please verify your email to finish the process <br />
 
-<a href="${verifyUrl}/${token}"> <strong>${verifyUrl}/${token}</strong> </a>.`
+<a href="${verifyUrl}/${token}"> <strong>${verifyUrl}/${token}</strong></a>`
   };
 
   await sgMail.send(msg);
