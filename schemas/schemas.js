@@ -108,9 +108,21 @@ const inviteSchema = {
     .required()
 };
 
-const manualConfirmSchema = {
+const manualConfirmationSchema = {
   meetup_day: daySchema.required(),
   meetup_time: timeSchema.required()
 };
 
-module.exports = { inviteSchema, manualConfirmSchema };
+const confirmationSchema = {
+  timezone: Joi.string()
+    .timezone()
+    .required(),
+  availability: Joi.array()
+    .items({
+      day: daySchema,
+      timeslots: Joi.array().items(timeSchema)
+    })
+    .required()
+};
+
+module.exports = { inviteSchema, manualConfirmationSchema, confirmationSchema };

@@ -41,4 +41,17 @@ ${user1Name} would like you to complete the FlexTogether beta with them. They've
   await sgMail.send(msg);
 }
 
-module.exports = { sendVerfication, sendInvitation };
+async function sendConfirmation(name, email, buddyName, day, time) {
+  const msg = {
+    to: email,
+    from: "hello@flextogether.com",
+    subject: `Confirmation on FlexTogether `,
+    html: `Hi ${name}, <br /> 
+<br />
+You are scheduled to workout with ${buddyName} on ${day} at ${time} for next 4 weeks. Enjoy staying active with FlexTogether!`
+  };
+
+  await sgMail.send(msg);
+}
+
+module.exports = { sendVerfication, sendInvitation, sendConfirmation };

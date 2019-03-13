@@ -2,7 +2,11 @@ const express = require("express");
 const InvitesModel = require("../models/invitesModel");
 const UsersModel = require("../models/usersModel");
 const Joi = require("joi");
-const { inviteSchema, manualConfirmSchema } = require("../schemas/schemas");
+const {
+  inviteSchema,
+  manualConfirmationSchema,
+  confirmationSchema
+} = require("../schemas/schemas");
 const Email = require("../services/email");
 const validateToken = require("../middlewares/validateToken");
 
@@ -103,18 +107,95 @@ router.get("/:token", validateToken, async (req, res) => {
 
 // Confirm invite by token
 router.post("/:token/confirm", validateToken, async (req, res) => {
-  res.status(201).end();
+  try {
+    const { value, error } = Joi.validate(req.body, confirmationSchema);
+
+    if (error != null) {
+      res.status(400).json(error.details[0]);
+    } else {
+      const timezone = value.timezone;
+      const availability = value.availability;
+
+      const invite = await InvitesModel.getById(req.decoded.id);
+
+      // update user2 timezone
+      await UsersModel.update(invite.user2_id, { timezone });
+
+      // calculate meetup_day, meetup_time
+      const meetup_day = availability[0].day;
+      const timeslots = availability[0].timeslots;
+      let meetup_time;
+
+      if (timeslots.length === 1) {
+        meetup_time = timeslots[0];
+      } else {
+        meetup_time = timeslots[Math.round(timeslots.length / 2) - 1];
+      }
+
+      // update invite user2_availibilty, meetup_day, meetup_time
+      await InvitesModel.update(req.decoded.id, {
+        user2_availability: JSON.stringify(value.availability),
+        meetup_day,
+        meetup_time
+      });
+
+      const user1 = await UsersModel.getById(invite.user1_id);
+      const user2 = await UsersModel.getById(invite.user2_id);
+      // send user1 email
+      await Email.sendConfirmation(
+        user1.name,
+        user1.email,
+        user2.name,
+        meetup_day,
+        meetup_time
+      );
+      // send user2 email
+      await Email.sendConfirmation(
+        user2.name,
+        user2.email,
+        user1.name,
+        meetup_day,
+        meetup_time
+      );
+
+      res.status(201).end();
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "There was an error confirming this request."
+    });
+  }
 });
 
 // Confirm invite by token
 router.post("/:token/manual_confirm", validateToken, async (req, res) => {
   try {
-    const { value, error } = Joi.validate(req.body, manualConfirmSchema);
+    const { value, error } = Joi.validate(req.body, manualConfirmationSchema);
 
     if (error != null) {
       res.status(400).json(error.details[0]);
     } else {
       await InvitesModel.update(req.decoded.id, value);
+      const invite = await InvitesModel.getById(req.decoded.id);
+      const user1 = await UsersModel.getById(invite.user1_id);
+      const user2 = await UsersModel.getById(invite.user2_id);
+      // send user1 email
+      await Email.sendConfirmation(
+        user1.name,
+        user1.email,
+        user2.name,
+        value.meetup_day,
+        value.meetup_time
+      );
+      // send user2 email
+      await Email.sendConfirmation(
+        user2.name,
+        user2.email,
+        user1.name,
+        value.meetup_day,
+        value.meetup_time
+      );
       res.status(201).end();
     }
   } catch (error) {

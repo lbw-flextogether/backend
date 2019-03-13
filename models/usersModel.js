@@ -14,7 +14,14 @@ async function getById(id) {
     .first();
 }
 
+async function update(id, changes) {
+  return db("users")
+    .where("id", id)
+    .update(changes);
+}
+
 module.exports = {
   insert,
-  getById
+  getById,
+  update
 };
