@@ -3,14 +3,14 @@ const db = require("../data/dbConfig");
 function inviteToJSON(invite) {
   return {
     ...invite,
-    availability: JSON.parse(invite.availability)
+    user1_availability: JSON.parse(invite.user1_availability)
   };
 }
 
 async function insert(value) {
   const updatedValue = {
     ...value,
-    availability: JSON.stringify(value.availability)
+    user1_availability: JSON.stringify(value.user1_availability)
   };
 
   const [id] = await db("invites").insert(updatedValue, "id");
@@ -29,7 +29,23 @@ async function getById(id) {
   return inviteToJSON(invite);
 }
 
+async function getUser1(id) {
+  return db("invites")
+    .join("users", "invites.user1_id", "users.id")
+    .where("invites.id", id)
+    .first();
+}
+
+async function getUser2(id) {
+  return db("invites")
+    .join("users", "invites.user2_id", "users.id")
+    .where("invites.id", id)
+    .first();
+}
+
 module.exports = {
   insert,
-  getById
+  getById,
+  getUser1,
+  getUser2
 };

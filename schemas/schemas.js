@@ -4,6 +4,8 @@ const JoiPhoneNumber = require("joi-phone-number");
 const Joi = BaseJoi.extend([JoiTimezone, JoiPhoneNumber]);
 
 const inviteSchema = {
+  is_companion: Joi.boolean().required(),
+
   name: Joi.string()
     .min(2)
     .max(128)
@@ -15,6 +17,8 @@ const inviteSchema = {
 
   phone_number: Joi.string()
     .phoneNumber()
+    .min(10)
+    .max(15)
     .required(),
 
   notification_preference: Joi.any()
@@ -25,7 +29,7 @@ const inviteSchema = {
     .valid(["Low", "Medium", "High"])
     .required(),
 
-  time_zone: Joi.string()
+  timezone: Joi.string()
     .timezone()
     .required(),
 
@@ -40,7 +44,7 @@ const inviteSchema = {
         "Saturday",
         "Sunday"
       ]),
-      time_slots: Joi.array().items(
+      timeslots: Joi.array().items(
         Joi.any().valid([
           "6:00 am",
           "6:30 am",
@@ -93,6 +97,8 @@ const inviteSchema = {
 
   recipient_phone_number: Joi.string()
     .phoneNumber()
+    .min(10)
+    .max(15)
     .required(),
 
   recipient_mobility_level: Joi.any()

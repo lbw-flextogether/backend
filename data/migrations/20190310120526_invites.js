@@ -2,18 +2,29 @@ exports.up = function(knex, Promise) {
   return knex.schema.createTable("invites", tbl => {
     tbl.increments();
 
-    tbl.string("name", 128).notNullable();
-    tbl.string("email", 128).notNullable();
-    tbl.string("phone_number", 15).notNullable();
-    tbl.string("notification_preference", 128).notNullable();
-    tbl.string("mobility_level", 128).notNullable();
-    tbl.string("time_zone", 128).notNullable();
-    tbl.text("availability").notNullable();
+    tbl
+      .integer("user1_id")
+      .unsigned()
+      .references("id")
+      .inTable("users")
+      .onDelete("CASCADE")
+      .onUpdate("CASCADE");
+    tbl.text("user1_availability").notNullable();
+    tbl.boolean("user1_is_companion").notNullable();
+    tbl.boolean("user1_verified").notNullable();
 
-    tbl.string("recipient_name", 128).notNullable();
-    tbl.string("recipient_email", 128).notNullable();
-    tbl.string("recipient_phone_number", 15).notNullable();
-    tbl.string("recipient_mobility_level", 128).notNullable();
+    tbl
+      .integer("user2_id")
+      .unsigned()
+      .references("id")
+      .inTable("users")
+      .onDelete("CASCADE")
+      .onUpdate("CASCADE");
+    tbl.text("user2_availability");
+    tbl.boolean("user2_is_companion").notNullable();
+
+    tbl.string("meetup_day");
+    tbl.string("meetup_timeslot");
   });
 };
 

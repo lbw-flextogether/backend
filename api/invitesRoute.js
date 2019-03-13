@@ -1,5 +1,6 @@
 const express = require("express");
-const Invites = require("../models/invitesModel");
+const InvitesModel = require("../models/invitesModel");
+const UsersModel = require("../models/usersModel");
 const Joi = require("joi");
 const invitesSchemas = require("../schemas/schemas");
 const Email = require("../services/email");
@@ -17,9 +18,33 @@ router.post("/", async (req, res) => {
     if (error != null) {
       res.status(400).json(error.details[0]);
     } else {
-      const invite = await Invites.insert(value);
-      await Email.sendVerficationEmail(invite);
-      res.status(201).json(invite);
+      const user1 = await UsersModel.insert({
+        name: value.name,
+        email: value.email,
+        phone_number: value.phone_number,
+        notification_preference: value.notification_preference,
+        mobility_level: value.mobility_level,
+        timezone: value.timezone
+      });
+      const user2 = await UsersModel.insert({
+        name: value.recipient_name,
+        email: value.recipient_email,
+        phone_number: value.recipient_phone_number,
+        notification_preference: value.notification_preference,
+        mobility_level: value.recipient_mobility_level,
+        timezone: value.timezone
+      });
+
+      const invite = await InvitesModel.insert({
+        user1_id: user1.id,
+        user2_id: user2.id,
+        user1_availability: value.availability,
+        user1_is_companion: value.is_companion,
+        user1_verified: false,
+        user2_is_companion: !value.is_companion
+      });
+      await Email.sendVerficationEmail(invite.id, user1.name, user1.email);
+      res.status(201).json({ id: invite.id, ...value });
     }
   } catch (error) {
     console.log(error);
@@ -38,9 +63,24 @@ router.post("/:token/verify", async (req, res) => {
 router.get("/:token", async (req, res) => {
   try {
     const decoded = await tokenService.verifyToken(req.params.token);
-    const invite = await Invites.getById(decoded.id);
+    const user1 = await InvitesModel.getUser1(decoded.id);
+    const user2 = await InvitesModel.getUser2(decoded.id);
 
-    res.status(200).json(invite);
+    res.status(200).json({
+      id: decoded.id,
+      is_companion: Boolean(user1.user1_is_companion),
+      name: user1.name,
+      email: user1.email,
+      phone_number: user1.phone_number,
+      timezone: user1.timezone,
+      notification_preference: user1.notification_preference,
+      mobility_level: user1.mobility_level,
+      availability: JSON.parse(user1.user1_availability),
+      recipient_name: user2.name,
+      recipient_email: user2.email,
+      recipient_phone_number: user2.phone_number,
+      recipient_mobility_level: user2.mobility_level
+    });
   } catch (error) {
     console.log(error);
 

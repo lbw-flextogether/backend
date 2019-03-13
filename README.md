@@ -18,42 +18,44 @@ URL: `/api/invite`
 
 ### Body
 
-| Name                     | Type   | Required | Description                                                               |
-| ------------------------ | ------ | -------- | ------------------------------------------------------------------------- |
-| name                     | string | yes      | Up tp 128 characters                                                      |
-| email                    | string | yes      | Up to 128 characters                                                      |
-| phone_number             | string | yes      | Min 10 and Max 15 characters                                              |
-| notificaton_preference   | string | yes      | Choose one option from Text, Email, Text & Email                          |
-| mobility_level           | string | yes      | Choose one option from Low, Medium, High                                  |
-| time_zone                | string | yes      | IANA timezone strings, validated against [https://momentjs.com/timezone/] |
-| availability             | array  | yes      | Choose any Day from Monday - Sunday and any time between 6:00am - 11:00pm |
-| recipient_name           | string | yes      | Up to 128 characters                                                      |
-| recipient_email          | string | yes      | Up to 128 characters                                                      |
-| recipient_phone_number   | string | yes      | Min 10 and Max 15 characters                                              |
-| recipient_mobility_level | string | yes      | Choose one option from Low, Medium, High                                  |
+| Name                     | Type    | Required | Description                                                               |
+| ------------------------ | ------- | -------- | ------------------------------------------------------------------------- |
+| is_companion             | boolean | yes      | Indicates if a user is a companion or not. (true = 1, false = 0)          |
+| name                     | string  | yes      | Up tp 128 characters                                                      |
+| email                    | string  | yes      | Up to 128 characters                                                      |
+| phone_number             | string  | yes      | Min 10 and Max 15 characters                                              |
+| notificaton_preference   | string  | yes      | Choose one option from Text, Email, Text & Email                          |
+| mobility_level           | string  | yes      | Choose one option from Low, Medium, High                                  |
+| timezone                 | string  | yes      | IANA timezone strings, validated against [https://momentjs.com/timezone/] |
+| availability             | array   | yes      | Choose any Day from Monday - Sunday and any time between 6:00am - 11:00pm |
+| recipient_name           | string  | yes      | Up to 128 characters                                                      |
+| recipient_email          | string  | yes      | Up to 128 characters                                                      |
+| recipient_phone_number   | string  | yes      | Min 10 and Max 15 characters                                              |
+| recipient_mobility_level | string  | yes      | Choose one option from Low, Medium, High                                  |
 
 ### Example:
 
 ```json
 {
+  "is_companion": "false",
   "name": "Jenny",
   "email": "jenny_fake@gmail.com",
   "phone_number": "000 000 0000",
   "notification_preference": "Text",
   "mobility_level": "Low",
-  "time_zone": "Australia/Sydney",
+  "timezone": "Australia/Sydney",
   "availability": [
     {
       "day": "Monday",
-      "time_slots": ["6:00 am", "6:30am"]
+      "timeslots": ["6:00 am", "6:30am"]
     },
     {
       "day": "Friday",
-      "time_slots": ["7:00 am", "7:30 am", "8:00 am"]
+      "timeslots": ["7:00 am", "7:30 am", "8:00 am"]
     },
     {
       "day": "Saturday",
-      "time_slots": ["6:00 am", "8:00 am"]
+      "timeslots": ["6:00 am", "8:00 am"]
     }
   ],
   "recipient_name": "John",
@@ -155,19 +157,19 @@ https://flextogether.herokuapp.com/api/invite/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVC
   "phone_number": "000 000 0000",
   "notification_preference": "Text",
   "mobility_level": "Low",
-  "time_zone": "Australia/Sydney",
+  "timezone": "Australia/Sydney",
   "availability": [
     {
       "day": "Monday",
-      "time_slots": ["6:00 am", "6:30 am"]
+      "timeslots": ["6:00 am", "6:30 am"]
     },
     {
       "day": "Friday",
-      "time_slots": ["7:00 am", "7:30 am", "8:00 am"]
+      "timeslots": ["7:00 am", "7:30 am", "8:00 am"]
     },
     {
       "day": "Saturday",
-      "time_slots": ["6:00 am", "8:00 am"]
+      "timeslots": ["6:00 am", "8:00 am"]
     }
   ],
   "recipient_name": "John",
@@ -218,11 +220,11 @@ JSON:
   "availability": [
     {
       "day": "Monday",
-      "time_slots": ["6:00 am"]
+      "timeslots": ["6:00 am"]
     },
     {
       "day": "Friday",
-      "time_slots": ["7:30 am"]
+      "timeslots": ["7:30 am"]
     }
   ]
 }
