@@ -79,19 +79,20 @@ router.post("/:token/verify", validateToken, async (req, res) => {
 // Get invite by token
 router.get("/:token", validateToken, async (req, res) => {
   try {
-    const user1 = await InvitesModel.getUser1(req.decoded.id);
-    const user2 = await InvitesModel.getUser2(req.decoded.id);
+    const invite = await InvitesModel.getById(req.decoded.id);
+    const user1 = await UsersModel.getById(invite.user1_id);
+    const user2 = await UsersModel.getById(invite.user2_id);
 
     res.status(200).json({
       id: req.decoded.id,
-      is_companion: Boolean(user1.user1_is_companion),
+      is_companion: Boolean(invite.user1_is_companion),
       name: user1.name,
       email: user1.email,
       phone_number: user1.phone_number,
       timezone: user1.timezone,
       notification_preference: user1.notification_preference,
       mobility_level: user1.mobility_level,
-      availability: JSON.parse(user1.user1_availability),
+      availability: invite.user1_availability,
       recipient_name: user2.name,
       recipient_email: user2.email,
       recipient_phone_number: user2.phone_number,
