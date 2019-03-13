@@ -4,7 +4,7 @@ const UsersModel = require("../models/usersModel");
 const Joi = require("joi");
 const invitesSchemas = require("../schemas/schemas");
 const Email = require("../services/email");
-const tokenService = require("../services/tokenService");
+const validateToken = require("../middlewares/validateToken");
 
 const router = express.Router();
 
@@ -55,19 +55,18 @@ router.post("/", async (req, res) => {
 });
 
 // Verfiy email
-router.post("/:token/verify", async (req, res) => {
+router.post("/:token/verify", validateToken, async (req, res) => {
   res.status(201).end();
 });
 
 // Get invite by token
-router.get("/:token", async (req, res) => {
+router.get("/:token", validateToken, async (req, res) => {
   try {
-    const decoded = await tokenService.verifyToken(req.params.token);
-    const user1 = await InvitesModel.getUser1(decoded.id);
-    const user2 = await InvitesModel.getUser2(decoded.id);
+    const user1 = await InvitesModel.getUser1(req.decoded.id);
+    const user2 = await InvitesModel.getUser2(req.decoded.id);
 
     res.status(200).json({
-      id: decoded.id,
+      id: req.decoded.id,
       is_companion: Boolean(user1.user1_is_companion),
       name: user1.name,
       email: user1.email,
@@ -83,20 +82,15 @@ router.get("/:token", async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-
-    if (error.name === "JsonWebTokenError") {
-      res.status(400).json({ message: "Invalid token provided" });
-    } else {
-      res.status(500).json({
-        message: "There was an error to get invite."
-      });
-    }
+    res.status(500).json({
+      message: "There was an error to get invite."
+    });
   }
 });
 
 // Confirm invite by token
 
-router.post("/:token/confirm", async (req, res) => {
+router.post("/:token/confirm", validateToken, async (req, res) => {
   res.status(201).end();
 });
 
