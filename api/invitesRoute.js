@@ -8,6 +8,7 @@ const {
   confirmationSchema
 } = require("../schemas/schemas");
 const Email = require("../services/email");
+const tokenService = require("../services/tokenService");
 const validateToken = require("../middlewares/validateToken");
 
 const router = express.Router();
@@ -47,8 +48,9 @@ router.post("/", async (req, res) => {
         user1_verified: false,
         user2_is_companion: !value.is_companion
       });
-      await Email.sendVerfication(invite.id, user1.name, user1.email);
-      res.status(201).json({ id: invite.id, ...value });
+      const token = tokenService.generateToken({ id: invite.id });
+      await Email.sendVerfication(invite.id, user1.name, user1.email, token);
+      res.status(201).json({ id: invite.id, ...value, token });
     }
   } catch (error) {
     console.log(error);
@@ -159,7 +161,7 @@ router.post("/:token/confirm", validateToken, async (req, res) => {
         meetup_time
       );
 
-      res.status(201).end();
+      res.status(201).json({ meetup_day, meetup_time });
     }
   } catch (error) {
     console.log(error);
@@ -182,6 +184,8 @@ router.post("/:token/manual_confirm", validateToken, async (req, res) => {
       const invite = await InvitesModel.getById(req.decoded.id);
       const user1 = await UsersModel.getById(invite.user1_id);
       const user2 = await UsersModel.getById(invite.user2_id);
+      const meetup_day = value.meetup_day;
+      const meetup_time = value.meetup_time;
 
       // send user1 email
       await Email.sendConfirmation(
@@ -200,7 +204,8 @@ router.post("/:token/manual_confirm", validateToken, async (req, res) => {
         value.meetup_day,
         value.meetup_time
       );
-      res.status(201).end();
+
+      res.status(201).json({ meetup_day, meetup_time });
     }
   } catch (error) {
     console.log(error);
