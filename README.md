@@ -41,7 +41,7 @@ URL: `/api/invite`
   "name": "Jenny",
   "email": "jenny_fake@gmail.com",
   "phone_number": "000 000 0000",
-  "notification_preference": "Text",
+  "notification_preference": "Email",
   "mobility_level": "Low",
   "timezone": "Australia/Sydney",
   "availability": [
@@ -156,7 +156,7 @@ https://flextogether.herokuapp.com/api/invite/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVC
   "name": "Jenny",
   "email": "jenny_fake@gmail.com",
   "phone_number": "000 000 0000",
-  "notification_preference": "Text",
+  "notification_preference": "Email",
   "mobility_level": "Low",
   "timezone": "Australia/Sydney",
   "availability": [
@@ -202,9 +202,10 @@ URL: `/api/invite/:token/confirm`
 
 ### Body
 
-| name         | type  | required | description                                   |
-| ------------ | ----- | -------- | --------------------------------------------- |
-| availability | array | yes      | Choose any availability from options provided |
+| name         | type   | required | description                                                               |
+| ------------ | ------ | -------- | ------------------------------------------------------------------------- |
+| timezone     | string | yes      | IANA timezone strings, validated against [https://momentjs.com/timezone/] |
+| availability | array  | yes      | Choose any availability from options provided                             |
 
 ### Example:
 
@@ -218,6 +219,7 @@ JSON:
 
 ```json
 {
+  "timezone": "America_NewYork",
   "availability": [
     {
       "day": "Monday",

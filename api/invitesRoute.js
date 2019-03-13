@@ -14,7 +14,7 @@ const router = express.Router();
 
 router.use(express.json());
 
-// Create an inivite
+// Create an inivite and send an email to verify user1 email
 router.post("/", async (req, res) => {
   try {
     const { value, error } = Joi.validate(req.body, inviteSchema);
@@ -58,7 +58,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Verfiy email
+//  Verfiy email - when user1 verifies email update "user1_verified" and then send an email to user2 with user1 availability
 router.post("/:token/verify", validateToken, async (req, res) => {
   try {
     const invite = await InvitesModel.getById(req.decoded.id);
@@ -177,10 +177,12 @@ router.post("/:token/manual_confirm", validateToken, async (req, res) => {
     if (error != null) {
       res.status(400).json(error.details[0]);
     } else {
+      // update meetup time and day that was entered manually
       await InvitesModel.update(req.decoded.id, value);
       const invite = await InvitesModel.getById(req.decoded.id);
       const user1 = await UsersModel.getById(invite.user1_id);
       const user2 = await UsersModel.getById(invite.user2_id);
+
       // send user1 email
       await Email.sendConfirmation(
         user1.name,
@@ -189,6 +191,7 @@ router.post("/:token/manual_confirm", validateToken, async (req, res) => {
         value.meetup_day,
         value.meetup_time
       );
+
       // send user2 email
       await Email.sendConfirmation(
         user2.name,
