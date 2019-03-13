@@ -152,6 +152,7 @@ https://flextogether.herokuapp.com/api/invite/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVC
 ```json
 {
   "id": 1,
+  "is_companion": "false",
   "name": "Jenny",
   "email": "jenny_fake@gmail.com",
   "phone_number": "000 000 0000",
@@ -227,6 +228,56 @@ JSON:
       "timeslots": ["7:30 am"]
     }
   ]
+}
+```
+
+### Response:
+
+**201 (OK)**
+
+> If the token is valid and confirmation was successful, the endpoint will return the HTTP status code 201.
+
+**400 (Bad Request)**
+
+> If the token was invalid or malformed, the endpoint will return the HTTP status code of 400.
+
+**500 (Internal Server Error)**
+
+> If an email was not sent due to server/sendgrid error, the endpoint will return the HTTP status code of 500.
+
+## When no time works out for friend/family member then they can select a day and time manually by confirming user via phone call.
+
+HTTP Method: `POST`
+
+URL: `/api/invite/:token/manual_confirm`
+
+### Headers
+
+| Name         | Type   | Required | Description              |
+| ------------ | ------ | -------- | ------------------------ |
+| Content-Type | String | Yes      | Must be application/json |
+
+### Body
+
+| name        | type   | required | description                              |
+| ----------- | ------ | -------- | ---------------------------------------- |
+| meetup_day  | string | yes      | Choose any Day from Monday - Sunday      |
+| meetup_time | string | yes      | Choose any time between 6:00am - 11:00pm |
+
+### Example:
+
+URL:
+
+```
+https://flextogether.herokuapp.com/api/invite/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoyNSwiaWF0IjoxNTUyMjg0NTc5LCJleHAiOjE1NTIzNzA5Nzl9.MsQbQ2kEp5ARg0d7nO7Cw-AYEyJL5urcrGei_S_NAQc/manual_confirm
+```
+
+JSON:
+
+```json
+{
+  "meetup_day": "Monday",
+  "meetup_time": "4:00 pm"
 }
 ```
 

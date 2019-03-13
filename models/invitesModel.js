@@ -29,23 +29,14 @@ async function getById(id) {
   return inviteToJSON(invite);
 }
 
-async function getUser1(id) {
+async function update(id, changes) {
   return db("invites")
-    .join("users", "invites.user1_id", "users.id")
-    .where("invites.id", id)
-    .first();
-}
-
-async function getUser2(id) {
-  return db("invites")
-    .join("users", "invites.user2_id", "users.id")
-    .where("invites.id", id)
-    .first();
+    .where("id", id)
+    .update(changes);
 }
 
 module.exports = {
   insert,
   getById,
-  getUser1,
-  getUser2
+  update
 };
