@@ -2,7 +2,7 @@ const express = require("express");
 const InvitesModel = require("../models/invitesModel");
 const UsersModel = require("../models/usersModel");
 const Joi = require("joi");
-const invitesSchemas = require("../schemas/schemas");
+const { inviteSchema, manualConfirmSchema } = require("../schemas/schemas");
 const Email = require("../services/email");
 const validateToken = require("../middlewares/validateToken");
 
@@ -13,7 +13,7 @@ router.use(express.json());
 // Create an inivite
 router.post("/", async (req, res) => {
   try {
-    const { value, error } = Joi.validate(req.body, invitesSchemas);
+    const { value, error } = Joi.validate(req.body, inviteSchema);
 
     if (error != null) {
       res.status(400).json(error.details[0]);
@@ -63,7 +63,7 @@ router.post("/:token/verify", validateToken, async (req, res) => {
     await InvitesModel.update(invite.id, { user1_verified: true });
 
     await Email.sendInvitation(invite.id, user1.name, user2.name, user2.email);
-    res.status(201).json(invite);
+    res.status(201).end();
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -102,9 +102,27 @@ router.get("/:token", validateToken, async (req, res) => {
 });
 
 // Confirm invite by token
-
 router.post("/:token/confirm", validateToken, async (req, res) => {
   res.status(201).end();
+});
+
+// Confirm invite by token
+router.post("/:token/manual_confirm", validateToken, async (req, res) => {
+  try {
+    const { value, error } = Joi.validate(req.body, manualConfirmSchema);
+
+    if (error != null) {
+      res.status(400).json(error.details[0]);
+    } else {
+      await InvitesModel.update(req.decoded.id, value);
+      res.status(201).end();
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "There was an error confirming this request."
+    });
+  }
 });
 
 module.exports = router;

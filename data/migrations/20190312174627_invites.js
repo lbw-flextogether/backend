@@ -24,7 +24,7 @@ exports.up = function(knex, Promise) {
     tbl.boolean("user2_is_companion").notNullable();
 
     tbl.string("meetup_day");
-    tbl.string("meetup_timeslot");
+    tbl.string("meetup_time");
   });
 };
 
