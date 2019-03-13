@@ -43,7 +43,7 @@ router.post("/", async (req, res) => {
         user1_verified: false,
         user2_is_companion: !value.is_companion
       });
-      await Email.sendVerficationEmail(invite.id, user1.name, user1.email);
+      await Email.sendVerfication(invite.id, user1.name, user1.email);
       res.status(201).json({ id: invite.id, ...value });
     }
   } catch (error) {
@@ -56,7 +56,20 @@ router.post("/", async (req, res) => {
 
 // Verfiy email
 router.post("/:token/verify", validateToken, async (req, res) => {
-  res.status(201).end();
+  try {
+    const invite = await InvitesModel.getById(req.decoded.id);
+    const user1 = await UsersModel.getById(invite.user1_id);
+    const user2 = await UsersModel.getById(invite.user2_id);
+    await InvitesModel.update(invite.id, { user1_verified: true });
+
+    await Email.sendInvitation(invite.id, user1.name, user2.name, user2.email);
+    res.status(201).json(invite);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "There was an error in verifying user."
+    });
+  }
 });
 
 // Get invite by token

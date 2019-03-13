@@ -8,6 +8,13 @@ async function insert(user) {
     .first();
 }
 
+async function getById(id) {
+  return await db("users")
+    .where({ id })
+    .first();
+}
+
 module.exports = {
-  insert
+  insert,
+  getById
 };

@@ -43,9 +43,16 @@ async function getUser2(id) {
     .first();
 }
 
+async function update(id, changes) {
+  return db("invites")
+    .where("id", id)
+    .update(changes);
+}
+
 module.exports = {
   insert,
   getById,
   getUser1,
-  getUser2
+  getUser2,
+  update
 };
