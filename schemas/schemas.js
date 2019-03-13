@@ -7,7 +7,7 @@ const daySchema = Joi.any().valid([
   "Monday",
   "Tuesday",
   "Wednesday",
-  "Thrusday",
+  "Thursday",
   "Friday",
   "Saturday",
   "Sunday"
