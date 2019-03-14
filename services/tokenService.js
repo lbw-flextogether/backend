@@ -5,11 +5,11 @@ function generateToken(data) {
     expiresIn: "1d"
   };
 
-  return jwt.sign(data, process.env.JWT_SECRET || "jwt_dev_token", options);
+  return jwt.sign(data, process.env.JWT_SECRET, options);
 }
 
 function verifyToken(token) {
-  return jwt.verify(token, process.env.JWT_SECRET || "jwt_dev_token");
+  return jwt.verify(token, process.env.JWT_SECRET);
 }
 
 module.exports = {
