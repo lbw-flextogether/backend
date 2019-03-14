@@ -219,7 +219,7 @@ JSON:
 
 ```json
 {
-  "timezone": "America_NewYork",
+  "timezone": "America/New_York",
   "availability": [
     {
       "day": "Monday",
@@ -261,10 +261,11 @@ URL: `/api/invite/:token/manual_confirm`
 
 ### Body
 
-| name        | type   | required | description                              |
-| ----------- | ------ | -------- | ---------------------------------------- |
-| meetup_day  | string | yes      | Choose any Day from Monday - Sunday      |
-| meetup_time | string | yes      | Choose any time between 6:00am - 11:00pm |
+| name        | type   | required | description                                                               |
+| ----------- | ------ | -------- | ------------------------------------------------------------------------- |
+| timezone    | string | yes      | IANA timezone strings, validated against [https://momentjs.com/timezone/] |
+| meetup_day  | string | yes      | Choose any Day from Monday - Sunday                                       |
+| meetup_time | string | yes      | Choose any time between 6:00am - 11:00pm                                  |
 
 ### Example:
 
