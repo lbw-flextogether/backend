@@ -18,6 +18,8 @@ Thanks for signing up! Can you please verify your email to finish the process <b
 <a href="${verifyUrl}/${token}"> <strong>${verifyUrl}/${token}</strong></a>`
   };
 
+  console.log(msg);
+
   await sgMail.send(msg);
 }
 
@@ -35,6 +37,8 @@ ${user1Name} would like you to complete the FlexTogether beta with them. They've
 <a href="${invitationUrl}/${token}"> <strong>${invitationUrl}/${token}</strong></a>`
   };
 
+  console.log(msg);
+
   await sgMail.send(msg);
 }
 
@@ -48,6 +52,8 @@ async function sendConfirmation(name, email, buddyName, day, time) {
 <br />
 You are scheduled to workout with ${buddyName} on ${day} at ${time} for next 4 weeks. Enjoy staying active with FlexTogether!`
   };
+
+  console.log(msg);
 
   await sgMail.send(msg);
 }
