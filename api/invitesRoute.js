@@ -49,7 +49,7 @@ router.post("/", async (req, res) => {
         user2_is_companion: !value.is_companion
       });
       const token = tokenService.generateToken({ id: invite.id });
-      await Email.sendVerfication(invite.id, user1.name, user1.email, token);
+      await Email.sendVerfication(user1.name, user1.email, token);
       res.status(201).json({ id: invite.id, ...value, token });
     }
   } catch (error) {
@@ -69,13 +69,7 @@ router.post("/:token/verify", validateToken, async (req, res) => {
     await InvitesModel.update(invite.id, { user1_verified: true });
 
     const token = tokenService.generateToken({ id: invite.id });
-    await Email.sendInvitation(
-      invite.id,
-      user1.name,
-      user2.name,
-      user2.email,
-      token
-    );
+    await Email.sendInvitation(user1.name, user2.name, user2.email, token);
     res.status(201).end();
   } catch (error) {
     console.log(error);
