@@ -109,6 +109,9 @@ const inviteSchema = {
 };
 
 const manualConfirmationSchema = {
+  timezone: Joi.string()
+    .timezone()
+    .required(),
   meetup_day: daySchema.required(),
   meetup_time: timeSchema.required()
 };

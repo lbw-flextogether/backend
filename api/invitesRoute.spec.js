@@ -160,6 +160,7 @@ describe("FlexTogether", () => {
       const res = await request(server)
         .post(`/api/invite/invalidToken/manual_confirm`)
         .send({
+          timezone: "America/Los_Angeles",
           meetup_day: "Saturday",
           meetup_time: "8:00 pm"
         });
@@ -179,6 +180,7 @@ describe("FlexTogether", () => {
       const res = await request(server)
         .post(`/api/invite/${body.token}/manual_confirm`)
         .send({
+          timezone: "America/Los_Angeles",
           meetup_day: "Saturday",
           meetup_time: "6:30 am"
         });

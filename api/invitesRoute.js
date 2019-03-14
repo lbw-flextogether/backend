@@ -10,6 +10,7 @@ const {
 const Email = require("../services/email");
 const tokenService = require("../services/tokenService");
 const validateToken = require("../middlewares/validateToken");
+const timezoneService = require("../services/timezone");
 
 const router = express.Router();
 
@@ -151,13 +152,19 @@ router.post("/:token/confirm", validateToken, async (req, res) => {
 
       const user1 = await UsersModel.getById(invite.user1_id);
       const user2 = await UsersModel.getById(invite.user2_id);
+      const user1Time = timezoneService.convertTimeToTimezone(
+        meetup_time,
+        timezone,
+        user1.timezone
+      );
+
       // send user1 email
       await Email.sendConfirmation(
         user1.name,
         user1.email,
         user2.name,
         meetup_day,
-        meetup_time
+        user1Time
       );
       // send user2 email
       await Email.sendConfirmation(
@@ -168,7 +175,10 @@ router.post("/:token/confirm", validateToken, async (req, res) => {
         meetup_time
       );
 
-      res.status(201).json({ meetup_day, meetup_time });
+      res.status(201).json({
+        meetup_day,
+        meetup_time
+      });
     }
   } catch (error) {
     console.log(error);
@@ -186,21 +196,30 @@ router.post("/:token/manual_confirm", validateToken, async (req, res) => {
     if (error != null) {
       res.status(400).json(error.details[0]);
     } else {
-      // update meetup time and day that was entered manually
-      await InvitesModel.update(req.decoded.id, value);
-      const invite = await InvitesModel.getById(req.decoded.id);
-      const user1 = await UsersModel.getById(invite.user1_id);
-      const user2 = await UsersModel.getById(invite.user2_id);
       const meetup_day = value.meetup_day;
       const meetup_time = value.meetup_time;
+      const timezone = value.timezone;
+
+      // update meetup time and day that was entered manually
+      await InvitesModel.update(req.decoded.id, { meetup_day, meetup_time });
+      const invite = await InvitesModel.getById(req.decoded.id);
+      await UsersModel.update(invite.user2_id, { timezone });
+      const user1 = await UsersModel.getById(invite.user1_id);
+      const user2 = await UsersModel.getById(invite.user2_id);
+
+      const user1Time = timezoneService.convertTimeToTimezone(
+        meetup_time,
+        timezone,
+        user1.timezone
+      );
 
       // send user1 email
       await Email.sendConfirmation(
         user1.name,
         user1.email,
         user2.name,
-        value.meetup_day,
-        value.meetup_time
+        meetup_day,
+        user1Time
       );
 
       // send user2 email
@@ -208,11 +227,14 @@ router.post("/:token/manual_confirm", validateToken, async (req, res) => {
         user2.name,
         user2.email,
         user1.name,
-        value.meetup_day,
-        value.meetup_time
+        meetup_day,
+        meetup_time
       );
 
-      res.status(201).json({ meetup_day, meetup_time });
+      res.status(201).json({
+        meetup_day,
+        meetup_time
+      });
     }
   } catch (error) {
     console.log(error);
