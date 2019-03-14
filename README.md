@@ -37,31 +37,31 @@ URL: `/api/invite`
 
 ```json
 {
-  "is_companion": "false",
-  "name": "Jenny",
-  "email": "jenny_fake@gmail.com",
-  "phone_number": "000 000 0000",
+  "is_companion": false,
+  "name": "User1",
+  "email": "user1_fake@gmail.com",
+  "phone_number": "333 333 3333",
   "notification_preference": "Email",
-  "mobility_level": "Low",
-  "timezone": "Australia/Sydney",
+  "mobility_level": "Medium",
+  "timezone": "America/New_York",
   "availability": [
     {
-      "day": "Monday",
-      "timeslots": ["6:00 am", "6:30am"]
+      "day": "Tuesday",
+      "timeslots": ["7:00 am", "8:30 am"]
     },
     {
-      "day": "Friday",
-      "timeslots": ["7:00 am", "7:30 am", "8:00 am"]
+      "day": "Wednesday",
+      "timeslots": ["10:00 am", "10:30 am"]
     },
     {
-      "day": "Saturday",
-      "timeslots": ["6:00 am", "8:00 am"]
+      "day": "Sunday",
+      "timeslots": ["8:00 am", "10:00 am", "4:00 pm"]
     }
   ],
-  "recipient_name": "John",
-  "recipient_email": "john_fake@yahoo.com",
+  "recipient_name": "User2",
+  "recipient_email": "user2_fake@gmail.com",
   "recipient_phone_number": "888 888 8888",
-  "recipient_mobility_level": "Medium"
+  "recipient_mobility_level": "High"
 }
 ```
 
@@ -69,7 +69,7 @@ URL: `/api/invite`
 
 **201 (OK)**
 
-> If you successfully created an invite the endpoint will return an HTTP response with a status code 201 and a body example as above + `id` field.
+> If you successfully created an invite the endpoint will return an HTTP response with a status code 201 and a body example as above + `id` field + `token`.
 
 **400 (Bad Request)**
 
@@ -108,7 +108,7 @@ URL: `/api/invite/:token/verify`
 ### Example:
 
 ```
-https://flextogether.herokuapp.com/api/invite/hbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoyNSwiaWF0IjoxNTUyMjg0NTc5LCJleHAiOjE1NTIzNzA5Nzl9.MsQbQ2kEp5ARg0d7nO7Cw-AYEyJL5urcrGei_S/verify
+https://flextogether.herokuapp.com/api/invite/hbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoyNSwiaWF0IjoxNTUyMjg0NTc5LCJleHAiOjE1NTIzNzA5Nzl9.MsQbQ2kEp5ARg0d7nO7CyJL5urcrG/verify
 ```
 
 ### Response:
@@ -140,7 +140,7 @@ URL: `/api/invite/:token`
 ### Example:
 
 ```
-https://flextogether.herokuapp.com/api/invite/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoyNSwiaWF0IjoxNTUyMjg0NTc5LCJleHAiOjE1NTIzNzA5Nzl9.MsQbQ2kEp5ARg0d7nO7Cw-AYEyJL5urcrGei_S_NAQc
+https://flextogether.herokuapp.com/api/invite/hbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoyNSwiaWF0IjoxNTUyMjg0NTc5LCJleHAiOjE1NTIzNzA5Nzl9.MsQbQ2kEp5ARg0d7nO7CyJL5urcrG
 ```
 
 ### Response:
@@ -152,31 +152,31 @@ https://flextogether.herokuapp.com/api/invite/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVC
 ```json
 {
   "id": 1,
-  "is_companion": "false",
-  "name": "Jenny",
-  "email": "jenny_fake@gmail.com",
-  "phone_number": "000 000 0000",
+  "is_companion": false,
+  "name": "User1",
+  "email": "user1_fake@gmail.com",
+  "phone_number": "333 333 3333",
   "notification_preference": "Email",
-  "mobility_level": "Low",
-  "timezone": "Australia/Sydney",
+  "mobility_level": "Medium",
+  "timezone": "America/New_York",
   "availability": [
     {
-      "day": "Monday",
-      "timeslots": ["6:00 am", "6:30 am"]
+      "day": "Tuesday",
+      "timeslots": ["7:00 am", "8:30 am"]
     },
     {
-      "day": "Friday",
-      "timeslots": ["7:00 am", "7:30 am", "8:00 am"]
+      "day": "Wednesday",
+      "timeslots": ["10:00 am", "10:30 am"]
     },
     {
-      "day": "Saturday",
-      "timeslots": ["6:00 am", "8:00 am"]
+      "day": "Sunday",
+      "timeslots": ["8:00 am", "10:00 am", "4:00 pm"]
     }
   ],
-  "recipient_name": "John",
-  "recipient_email": "john_fake@yahoo.com",
+  "recipient_name": "User2",
+  "recipient_email": "user2_fake@gmail.com",
   "recipient_phone_number": "888 888 8888",
-  "recipient_mobility_level": "Medium"
+  "recipient_mobility_level": "High"
 }
 ```
 
@@ -188,7 +188,7 @@ https://flextogether.herokuapp.com/api/invite/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVC
 
 > If server encounters internal runtime error, the endpoint will return the HTTP status code of 500.
 
-## When friend/family member selects their availability from options provided by a user.
+## When friend/family member selects their availability based on their timezone from the options provided by a user.
 
 HTTP Method: `POST`
 
@@ -212,22 +212,19 @@ URL: `/api/invite/:token/confirm`
 URL:
 
 ```
-https://flextogether.herokuapp.com/api/invite/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoyNSwiaWF0IjoxNTUyMjg0NTc5LCJleHAiOjE1NTIzNzA5Nzl9.MsQbQ2kEp5ARg0d7nO7Cw-AYEyJL5urcrGei_S_NAQc/confirm
+https://flextogether.herokuapp.com/api/invite/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsImlhdCI6MTU1MjU5MjY5NiwiZXhwIjoxNTUyNjc5MDk2fQ.hMX8RnGrjrwr5PzkUfJzFkW-nYzFqja8BZJ/confirm
 ```
 
 JSON:
+Friend/family member will enter their timezone first that will update the timeslots and then they will select their preferred day and times.
 
 ```json
 {
-  "timezone": "America/New_York",
+  "timezone": "America/Los_Angeles",
   "availability": [
     {
-      "day": "Monday",
-      "timeslots": ["6:00 am"]
-    },
-    {
-      "day": "Friday",
-      "timeslots": ["7:30 am"]
+      "day": "Wednesday",
+      "timeslots": ["7:00 am", "7:30 am"]
     }
   ]
 }
@@ -272,15 +269,18 @@ URL: `/api/invite/:token/manual_confirm`
 URL:
 
 ```
-https://flextogether.herokuapp.com/api/invite/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoyNSwiaWF0IjoxNTUyMjg0NTc5LCJleHAiOjE1NTIzNzA5Nzl9.MsQbQ2kEp5ARg0d7nO7Cw-AYEyJL5urcrGei_S_NAQc/manual_confirm
+https://flextogether.herokuapp.com/api/invite/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsImlhdCI6MTU1MjU5MjY5NiwiZXhwIjoxNTUyNjc5MDk2fQ.hMX8RnGrjrwr5PzkUfJzFkW-nYzFqja8BZJ/manual_confirm
 ```
 
 JSON:
 
+Friend/family member will enter/select their timezone first and then enter the confirmed day and time manually.
+
 ```json
 {
-  "meetup_day": "Monday",
-  "meetup_time": "4:00 pm"
+  "timezone": "America/Los_Angeles",
+  "meetup_day": "Sunday",
+  "meetup_time": "7:30 am"
 }
 ```
 
