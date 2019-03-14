@@ -1,14 +1,12 @@
 const sgMail = require("@sendgrid/mail");
-const tokenService = require("../services/tokenService");
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const verifyUrl = process.env.VERIFY_URL;
 const invitationUrl = process.env.INVITATION_URL;
 
-async function sendVerfication(inviteId, name, email) {
-  const token = tokenService.generateToken({ id: inviteId });
-
+// to verify
+async function sendVerfication(name, email, token) {
   const msg = {
     to: email,
     from: "hello@flextogether.com",
@@ -23,9 +21,8 @@ Thanks for signing up! Can you please verify your email to finish the process <b
   await sgMail.send(msg);
 }
 
-async function sendInvitation(inviteId, user1Name, user2Name, user2Email) {
-  const token = tokenService.generateToken({ id: inviteId });
-
+// to invite
+async function sendInvitation(user1Name, user2Name, user2Email, token) {
   const msg = {
     to: user2Email,
     from: "hello@flextogether.com",
@@ -41,6 +38,7 @@ ${user1Name} would like you to complete the FlexTogether beta with them. They've
   await sgMail.send(msg);
 }
 
+// to confirm
 async function sendConfirmation(name, email, buddyName, day, time) {
   const msg = {
     to: email,

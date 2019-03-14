@@ -68,7 +68,14 @@ router.post("/:token/verify", validateToken, async (req, res) => {
     const user2 = await UsersModel.getById(invite.user2_id);
     await InvitesModel.update(invite.id, { user1_verified: true });
 
-    await Email.sendInvitation(invite.id, user1.name, user2.name, user2.email);
+    const token = tokenService.generateToken({ id: invite.id });
+    await Email.sendInvitation(
+      invite.id,
+      user1.name,
+      user2.name,
+      user2.email,
+      token
+    );
     res.status(201).end();
   } catch (error) {
     console.log(error);

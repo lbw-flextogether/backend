@@ -4,6 +4,7 @@ function generateToken(data) {
   const options = {
     expiresIn: "1d"
   };
+
   return jwt.sign(data, process.env.JWT_SECRET, options);
 }
 
